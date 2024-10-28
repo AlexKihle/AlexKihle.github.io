@@ -1,6 +1,6 @@
 ## Pre-install
 - Download Arch Linux ISO
-- Create VM with 2 cores, 3GB RAM, 32GB HDD
+- Create VM with 2 cores, 2-3GB RAM, 32GB HDD
 - Mount ISO to VM
 - Change .vmx file to boot from EFI append the following line
 	firmware = "efi"
