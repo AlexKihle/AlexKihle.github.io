@@ -5,6 +5,7 @@
 - Change .vmx file to boot from EFI append the following line
 	firmware = "efi"
 - boot vm
+
 ## Boot and Prepare Installation Media
 check network
 
