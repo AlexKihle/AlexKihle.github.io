@@ -223,4 +223,4 @@ clear port 53
 get your ip address with hostname -I
 go to https://YOUR_IP/admin but replace YOUR_IP with your ip address
 
-![[pihole admin panel.png]]
+![Screenshot](pihole admin panel.png)
