@@ -178,3 +178,48 @@ add aliases
 	nano ~/.zshrc
 	# append alias c='clear', alias h='history', alias ..='cd ..'
 	source ~/.zshrc
+
+
+
+ ## Install docker
+	touch dockerScript
+	nano dockerSript
+	# paste script below
+	# Add Docker's official GPG key:
+	sudo apt-get update
+	sudo apt-get install ca-certificates curl
+	sudo install -m 0755 -d /etc/apt/keyrings
+		sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+	sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+	# Add the repository to Apt sources:
+	echo \ 
+	"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+	  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+	  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	sudo apt-get update
+
+#### Install Docker Packages
+	sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+#### Verify Installation
+	sudo docker run hello-world
+
+## Install Pi-hole
+	mkdir pihole
+	nano docker-compose.yml
+	# paste the docker-compose.yml.example from the pi-hole github
+
+my port 53 wasnt open so you you will also need to clear it 
+https://discourse.pi-hole.net/t/update-what-to-do-if-port-53-is-already-in-use/52033
+clear port 53
+	sudo nano /etc/systemd/resolved.conf
+	# uncomment DNSStubListener and change it to no
+	sudo service systemd-resolved restart
+
+	docker compose up -d
+	
+get your ip address with hostname -I
+go to https://YOUR_IP/admin but replace YOUR_IP with your ip address
+
+![[pihole admin panel.png]]
