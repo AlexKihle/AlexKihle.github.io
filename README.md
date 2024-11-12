@@ -1,3 +1,4 @@
+# Arch Linux Project
 ## Pre-install
 - Download Arch Linux ISO
 - Create VM with 2 cores, 2-3GB RAM, 32GB HDD
@@ -180,7 +181,7 @@ add aliases
 	source ~/.zshrc
 
 
-
+# Docker and Pi-hole Project
  ## Install docker
 	touch dockerScript
 	nano dockerSript
