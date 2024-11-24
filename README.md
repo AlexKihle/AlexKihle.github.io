@@ -318,7 +318,9 @@ Hit `CTRL` + `X`, `Y`, `ENTER` to save and exit the file.
 
 #### Connect phone to Wireguard
 	docker compose logs -f wireguard
+
 scan the the qr code with displayed from the wireguard app for ios
+
 ![phone1](20241124_003636000_iOS.jpg)
 
 ![phone2](20241124_003734000_iOS.png)
