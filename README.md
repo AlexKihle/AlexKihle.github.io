@@ -224,3 +224,114 @@ get your ip address with hostname -I
 go to https://YOUR_IP/admin but replace YOUR_IP with your ip address
 
 ![Screenshot](screenshot.png)
+
+
+# Docker Wireguard Lab
+
+## Create the DigitalOcean droplet
+#### create account on digital ocean
+link provided by the instructor
+
+follow instructions on site
+#### create a Droplet for Docker
+click create droplet
+select closest region
+choose ubuntu as image and select the newest version
+chooses cpu option that can run docker so at least the $6/month
+give droplet a password
+change name
+click create droplet
+
+Installation Instructions used:
+https://thematrix.dev/setup-wireguard-vpn-server-with-docker/
+## Install docker
+	touch dockerScript
+	nano dockerSript
+	# paste script below
+	# Add Docker's official GPG key:
+	sudo apt-get update
+	sudo apt-get install ca-certificates curl
+	sudo install -m 0755 -d /etc/apt/keyrings
+		sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+	sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+	# Add the repository to Apt sources:
+	echo \ 
+	"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+	  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+	  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	sudo apt-get update
+
+#### Install Docker Packages
+	sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+#### Verify Installation
+	sudo docker run hello-world
+
+## Setup wireguard
+#### run these on your server
+	mkdir -p ~/wireguard/
+	mkdir -p ~/wireguard/config/
+	nano ~/wireguard/docker-compose.yml
+
+#### copy this into .yaml file
+
+	version: '3.8'
+	services:
+	  wireguard:
+	    container_name: wireguard
+	    image: linuxserver/wireguard
+	    environment:
+	      - PUID=1000
+	      - PGID=1000
+	      - TZ=Asia/Hong_Kong
+	      - SERVERURL=1.2.3.4
+	      - SERVERPORT=51820
+	      - PEERS=pc1,pc2,phone1
+	      - PEERDNS=auto
+	      - INTERNAL_SUBNET=10.0.0.0
+	    ports:
+	      - 51820:51820/udp
+        volumes:
+	      - type: bind
+	        source: ./config/
+	        target: /config/
+	      - type: bind
+	        source: /lib/modules
+	        target: /lib/modules
+	    restart: always
+	    cap_add:
+	      - NET_ADMIN
+	      - SYS_MODULE
+	    sysctls:
+		  - net.ipv4.conf.all.src_valid_mark=1
+
+1. `TZ` refers to timezone. Choose yours from `TZ database name` from [Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones?ref=thematrix.dev).
+2. `SERVERURL` refers to the server IP address. Find it on Vultr or DigitalOcean dashboard.
+3. `PEERS` are the number of user-config-files to generate, or the names of user-config-files. If you enter `PEERS=3`, it will generate `peer_1`, `peer_2` and `peer_3`. If you enter `PEERS=pc1,pc2,phone1`, it will generate `peer_pc1`, `peer_pc2` and `peer_phone1`.
+
+Hit `CTRL` + `X`, `Y`, `ENTER` to save and exit the file.
+
+#### Start Wireguard
+	cd ~/wireguard/
+	docker compose up -d
+
+#### Connect phone to Wireguard
+	docker compose logs -f wireguard
+scan the the qr code with displayed from the wireguard app for ios
+![phone1](20241124_003636000_iOS.jpg)
+
+![phone2](20241124_003734000_iOS.png)
+
+#### Connect Laptop to Wireguard
+install wireguard application to laptop
+copy config file on droplet over to laptop
+create tunnel with the config file
+
+![screenshot2](2024-11-23_(1).png)
+
+![screenshot3](2024-11-23_(3).png)
+
+![wireguard](Screenshot_(3).png)
+
+
